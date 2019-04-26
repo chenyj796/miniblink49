@@ -243,7 +243,7 @@ static void promiseRejectHandlerInMainThread(v8::PromiseRejectMessage data)
     String errorMessage;
     RefPtrWillBeRawPtr<ScriptCallStack> callStack = nullptr;
 
-    v8::Local<v8::Message> message = v8::Exception::CreateMessage(exception);
+    v8::Local<v8::Message> message = v8::Exception::CreateMessage(isolate, exception);
     if (!message.IsEmpty()) {
         if (v8Call(message->GetLineNumber(isolate->GetCurrentContext()), lineNumber)
             && v8Call(message->GetStartColumn(isolate->GetCurrentContext()), columnNumber))
@@ -295,7 +295,7 @@ static void promiseRejectHandlerInWorker(v8::PromiseRejectMessage data)
     String resourceName;
     String errorMessage;
 
-    v8::Local<v8::Message> message = v8::Exception::CreateMessage(data.GetValue());
+    v8::Local<v8::Message> message = v8::Exception::CreateMessage(isolate, data.GetValue());
     if (!message.IsEmpty()) {
         TOSTRING_VOID(V8StringResource<>, resourceName, message->GetScriptOrigin().ResourceName());
         scriptId = message->GetScriptOrigin().ScriptID()->Value();
